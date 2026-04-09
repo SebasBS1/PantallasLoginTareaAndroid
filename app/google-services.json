@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "481857566809",
+    "project_id": "usuarios-9bcf7",
+    "storage_bucket": "usuarios-9bcf7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481857566809:android:ecb351fd39603d27c19948",
+        "android_client_info": {
+          "package_name": "sebastian.blanchet.login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRt6FNta_usk9ZZU_iStAL9mvIm1blxfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
