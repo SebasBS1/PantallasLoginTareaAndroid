@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.database
 import sebastian.blanchet.login.ui.theme.LoginTheme
 import kotlin.jvm.java
 
@@ -47,6 +48,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         auth = Firebase.auth
+
+        // Write a message to the database
+        //val database = Firebase.database
+        //val myRef = database.getReference("message")
+
+        //myRef.setValue("Hello, World!")
+        if(auth.currentUser != null){
+            val intent = Intent(this, PrincipalActivity::class.java)
+            startActivity(intent)
+        }
+
         setContent {
             LoginTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -105,6 +117,7 @@ fun PantallaInicio(auth: FirebaseAuth, modifier: Modifier = Modifier) {
                             if(task.isSuccessful){
                                 Toast.makeText(context, "Ingresaste!!! :D", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(context, PrincipalActivity::class.java)
+                                intent.putExtra("correo", correo)
                                 context.startActivity(intent)
                             }else{
                                 Toast.makeText(context, "Firebase murio", Toast.LENGTH_SHORT).show()

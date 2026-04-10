@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.database
 import sebastian.blanchet.login.ui.theme.LoginTheme
 import java.sql.Date
 import java.time.LocalDate
@@ -46,6 +48,7 @@ import java.time.format.DateTimeFormatter
 class ResgistroActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +58,7 @@ class ResgistroActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     PantallaRegistro(
                         auth,
+                        database,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -62,11 +66,13 @@ class ResgistroActivity : ComponentActivity() {
         }
 
         auth = Firebase.auth
+
+        database = Firebase.database.reference
     }
 }
 
 @Composable
-fun PantallaRegistro(auth: FirebaseAuth, modifier: Modifier = Modifier) {
+fun PantallaRegistro(auth: FirebaseAuth, database: DatabaseReference, modifier: Modifier = Modifier) {
 
     var correo by remember() { mutableStateOf(value = "") }
     var usuario by remember() { mutableStateOf(value = "")}
@@ -166,7 +172,17 @@ fun PantallaRegistro(auth: FirebaseAuth, modifier: Modifier = Modifier) {
                     auth.createUserWithEmailAndPassword(correo, contra)
                         .addOnCompleteListener { task ->
                             if(task.isSuccessful){
+                                var userID = auth.currentUser?.uid ?: "anonimo"
+                                var cuenta = Usuario(usuario, correo, fecha)
+
+                                database.child("usuarios").child(userID).setValue(cuenta)
+
                                 Toast.makeText(context, "Cuenta creada correctamente", Toast.LENGTH_SHORT).show()
+
+                                val intent = Intent(context, PrincipalActivity::class.java)
+                                intent.putExtra("nombre", usuario)
+                                intent.putExtra("correo", correo)
+                                context.startActivity(intent)
                             }else{
                                 Toast.makeText(context, "Firebase murio", Toast.LENGTH_SHORT).show()
                             }
